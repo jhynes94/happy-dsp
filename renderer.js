@@ -5,22 +5,9 @@
 //Run this command to package up application for distribution
 //electron-packager .
 
+var dataModels = [];
 
-const fs = require("fs");
-
-class model {
-    constructor(fileName) {
-        this.fileName = fileName;
-    }
-
-    testFunction() {
-        console.log("Function Called!")
-    }
-}
-
-
-//Determine Path of file
-function openFile () {
+function newData(){
     const {dialog} = require('electron').remote;
     
     var path = dialog.showOpenDialog({
@@ -31,74 +18,68 @@ function openFile () {
               ],
         properties: ['openFile']
     });
-
-    readData(path.toString());
+   
+    dataModels.push(new dataModel(path.toString()));
+    console.log("New Data Model created");
 }
 
-//Read data of file into RAM
-function readData (pathToFile) {
+class dataModel {
+
+    constructor(pathToFile) {
+        this.pathToFile = pathToFile;
+        $('#FileOutput').text(pathToFile)
+        this.readDataIn();
+        this.fftData();
+
+
+
+        
+        this.plotData(this.decibels, 'spectrum');
+        this.plotData(this.arrayOfData, 'timeDomain')
+    }
+
+    readDataIn () {
+
+        const fs = require("fs");
     
-    var data = fs.readFileSync(pathToFile);
+        var data = fs.readFileSync(this.pathToFile);
+        
+        //Convert string of Data to Array of Floats
+        this.arrayOfData = data.toString().split(/\r\n|\r|\n/g).map(function(i){
+            return parseFloat(i);
+        })
+
+        //Clean Array of floats to remove NaN error at last place
+        this.arrayOfData.splice(this.arrayOfData.length-1, 1);
+    }
+
+    fftData () {
+        var ft = require('fourier-transform');
+        var db = require('decibels');
     
-    //Convert string of Data to Array of Floats
-    var arrayOfData = data.toString().split(/\r\n|\r|\n/g).map(function(i){
-        return parseFloat(i);
-    })
-
-    //Clean Array of floats to remove NaN error at last place
-    arrayOfData.splice(arrayOfData.length-1, 1);
-
-    fft(arrayOfData);
-
-    $('#FileOutput').text(pathToFile)
-  }
-
-function fft(waveform) {
-    var ft = require('fourier-transform');
-    var db = require('decibels');
-
-    var spectrum = ft(waveform);
-
-    //convert to decibels 
-    var decibels = spectrum.map((value) => db.fromGain(value))
-
-    SpecPlot(decibels);
-    TimeDomainPlot(waveform);
-}
-
-function TimeDomainPlot(timeDomainData) {
-    x = [];
+        this.spectrum = ft(this.arrayOfData);
     
-        for (i = 0; i < timeDomainData.length-1; i++) {
+        //convert to decibels 
+        this.decibels = this.spectrum.map((value) => db.fromGain(value))
+    }
+
+    plotData (spectrum, element) {
+        var x = [];
+        
+        for (var i = 0; i < spectrum.length-1; i++) {
             x.push(i);
         }
-        console.log(timeDomainData);
     
-        TESTER = document.getElementById('timeDomain');
+        var TESTER = document.getElementById(element);
         Plotly.plot( TESTER, [{
         x: x,
-        y: timeDomainData,
+        y: spectrum,
         mode: "lines",
         type: "scatter"
         }], {
             margin: { t: 0 }
         } );
-}
-
-function SpecPlot(spectrum) {
-    x = [];
-
-    for (i = 0; i < spectrum.length-1; i++) {
-        x.push(i);
     }
 
-    TESTER = document.getElementById('spectrum');
-    Plotly.plot( TESTER, [{
-    x: x,
-    y: spectrum,
-    mode: "lines",
-    type: "scatter"
-    }], {
-        margin: { t: 0 }
-    } );
+
 }
