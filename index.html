@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <title>DSP</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./vendor/bootstrap-3.3.7.css">
+    <link rel="stylesheet" href="./styles.css">
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="renderer.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+
+  </head>
+  <body>
+      <div id="container" class="container-fluid">
+
+        <!-- Input row -->
+        <!-- <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+            <h3 class="hash-heading">Input</h3>
+            <textarea rows="2" id="text-input" class="form-control text-input" placeholder="Enter text and see it hashed..."></textarea>
+          </div>
+        </div> -->
+  
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h3 class="hash-heading">File</h3>
+            <pre id="FileOutput" class="hash-output"> </pre>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <button id="openFile" onclick="openFile();">Open</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div id="timeDomain" style="width:98%;height:100%;"></div>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div id="spectrum" style="width:98%;height:100%;"></div>
+            </div>
+        </div>
+      </div>
+    </body>
+</html>
