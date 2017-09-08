@@ -33,9 +33,7 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 ## Todo
 
 - Support more input file times besides unison export
-
-- Plot Time Domain
-
+- THD and THD+N
 - Plot Histogram
 
 ## License

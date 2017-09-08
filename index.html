@@ -26,19 +26,6 @@
             <textarea rows="2" id="text-input" class="form-control text-input" placeholder="Enter text and see it hashed..."></textarea>
           </div>
         </div> -->
-  
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h3 class="hash-heading">File</h3>
-            <pre id="FileOutput" class="hash-output"> </pre>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <button id="openFile" onclick="openFile();">Open</button>
-          </div>
-        </div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -52,12 +39,54 @@
             </div>
         </div>
 
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <button id="newData" onclick="newData();">Create new Data Model</button>
-          </div>
+        <div id="DataSection">
+        <div style="text-align:center;" class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              <h3>Fundemental</h3>
+              <pre id="1Harmonic" class="hash-output"> </pre>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              <h3>THD</h3>
+              <pre id="THD" class="hash-output"> </pre>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              <h3 style="text-align:center;">THD+N</h3>
+              <pre id="THD+N" class="hash-output"> </pre>
+            </div>
         </div>
+        <div style="text-align:center;" class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              <h3>2nd Harmonic</h3>
+              <pre id="2Harmonic" class="hash-output"> </pre>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              <h3>3rd Harmonic</h3>
+              <pre id="3Harmonic" class="hash-output"> </pre>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              <h3>4th Harmonic</h3>
+              <pre id="4Harmonic" class="hash-output"> </pre>
+            </div>
+        </div>
+        </div>
+
+        <script>document.getElementById('DataSection').style.visibility = "hidden";</script>
+
+        
+  
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <h3 class="hash-heading">File</h3>
+              <pre id="FileOutput" class="hash-output"> </pre>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <button id="newData" onclick="newData();" type="button" class="btn btn-primary">Import New Data Model</button>
+            </div>
+          </div>
+
       </div>
     </body>
 </html>

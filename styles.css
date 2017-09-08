@@ -1,5 +1,6 @@
 html, body, .container-fluid {
-  background-color: #D6D8DC;
+  background-color: #0E0B16;
+  color: #E7DFDD;
 }
 
 .text-input {
@@ -7,13 +8,13 @@ html, body, .container-fluid {
 }
 
 .hash-output {
-  color: #575B5E;
+  color: #A239CA;
   font-size: 16px;
   letter-spacing: 2px;
   white-space: pre-wrap;
 }
 
 .hash-heading {
-  color: #575B5E;
+  color: #E7DFDD;
   font-weight: normal;
 }
