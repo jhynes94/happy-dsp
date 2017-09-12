@@ -108,9 +108,12 @@ class dataModel {
         
 
         function findLargestValueIndexInRange(array, range, searchIndex) {
+
+            //if Search index is greater than array, the harmonic is out of range
             if(searchIndex+range > array.length){
                 return(-1);
             }
+            
             var largestValueInRange = -200; //-Infinity
             var largestValueInRangeIndex = searchIndex;
             for (var i = searchIndex-range; i <= searchIndex+range; i++) {
