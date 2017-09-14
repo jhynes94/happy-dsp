@@ -30,7 +30,8 @@ function newData(){
     console.log("New Data Model created");
 
 
-    document.getElementById('DataSection').style.visibility = "visible";
+    document.getElementById('DataSection').style.display = "inline"; //Show Data Page
+    document.getElementById('LandingPage').style.display = "none"; // Hide Landing Page
     
 
 }
@@ -113,7 +114,7 @@ class dataModel {
             if(searchIndex+range > array.length){
                 return(-1);
             }
-            
+
             var largestValueInRange = -200; //-Infinity
             var largestValueInRangeIndex = searchIndex;
             for (var i = searchIndex-range; i <= searchIndex+range; i++) {

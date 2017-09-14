@@ -1,10 +1,19 @@
-html, body, .container-fluid {
+html, body, .container-fluid, .jumbotron, .vertical-center, .container, .navbar, .navbar-default, .navbar-fixed-top {
   background-color: #0E0B16;
   color: #E7DFDD;
 }
 
 .text-input {
   font-size: 16px;
+}
+
+.navbar {
+  
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .hash-output {
@@ -17,4 +26,12 @@ html, body, .container-fluid {
 .hash-heading {
   color: #E7DFDD;
   font-weight: normal;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
 }

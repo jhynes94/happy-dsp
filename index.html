@@ -1,87 +1,135 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
 
-    <title>DSP</title>
+<head>
+  <meta charset="UTF-8">
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="./vendor/bootstrap-3.3.7.css">
-    <link rel="stylesheet" href="./styles.css">
+  <title>DSP</title>
 
-    <!-- Scripts -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-    <script src="renderer.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./vendor/bootstrap-3.3.7.css">
+  <link rel="stylesheet" href="./styles.css">
 
-  </head>
-  <body>
-      <div id="container" class="container-fluid">
+  <!-- Scripts -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="renderer.js"></script>
+  <script src="default.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-        <!-- Input row -->
-        <!-- <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-            <h3 class="hash-heading">Input</h3>
-            <textarea rows="2" id="text-input" class="form-control text-input" placeholder="Enter text and see it hashed..."></textarea>
-          </div>
-        </div> -->
 
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <div id="timeDomain" style="width:98%;height:100%;"></div>
-          </div>
-        </div>
+</head>
 
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div id="spectrum" style="width:98%;height:100%;"></div>
-            </div>
-        </div>
+<body>
 
-        <div id="DataSection">
-        <div style="text-align:center;" class="row">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <h3>Fundemental</h3>
-              <pre id="1Harmonic" class="hash-output"> </pre>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <h3>THD</h3>
-              <pre id="THD" class="hash-output"> </pre>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <h3 style="text-align:center;">THD+N</h3>
-              <pre id="THD+N" class="hash-output"> </pre>
-            </div>
-        </div>
-        <div style="text-align:center;" class="row">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <h3>2nd Harmonic</h3>
-              <pre id="2Harmonic" class="hash-output"> </pre>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <h3>3rd Harmonic</h3>
-              <pre id="3Harmonic" class="hash-output"> </pre>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <h3>4th Harmonic</h3>
-              <pre id="4Harmonic" class="hash-output"> </pre>
-            </div>
-        </div>
-        </div>
 
-        <script>document.getElementById('DataSection').style.visibility = "hidden";</script>
-
-        
+    <nav class="navbar navbar-default navbar-fixed-top">
+      
+        <button id="newData" onclick="newData();" type="button" class="btn btn-primary">Show Time Domain</button>
+        <button id="newData" onclick="newData();" type="button" class="btn btn-primary">Show Freq Domain</button>
   
-        <div class="row">
-            <div style="text-align:center;" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-md-offset-3">
-              <h3 class="hash-heading">File</h3>
-              <pre id="FileOutput" class="hash-output"> </pre>
-              <button id="newData" onclick="newData();" type="button" class="btn btn-primary">Import New Data Model</button>
-            </div>
-          </div>
+        <button style="-webkit-app-region: drag;" id="newData" onclick="newData();" type="button" class="btn btn-primary">Hold to DRAG</button>
+  
+        <ul class="nav navbar-nav navbar-right">
+          <button class="btn btn-primary" id="min-btn">-</button>
+          <button class="btn btn-primary" id="max-btn">+</button>
+          <button style="margin-right: 20px;" class="btn btn-danger" id="close-btn">x</button>
+        </ul>
+      </nav>
+  <div id="container" class="container-fluid">
 
+    <div class="col-xs-12" style="height:30px;"></div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="timeDomain" style="width:100%;height:100%;"></div>
       </div>
-    </body>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="spectrum" style="width:100%;height:100%;"></div>
+      </div>
+    </div>
+
+
+
+    <div id="DataSection">
+
+      <!-- Input row -->
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
+          <h3 class="hash-heading">Start Freq</h3>
+          <textarea rows="1" id="text-input" class="form-control text-input" placeholder=""></textarea>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
+          <h3 class="hash-heading">Stop Freq</h3>
+          <textarea rows="1" id="text-input" class="form-control text-input" placeholder=""></textarea>
+        </div>
+      </div>
+
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3>Fundemental</h3>
+          <pre id="1Harmonic" class="hash-output"> </pre>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3>THD</h3>
+          <pre id="THD" class="hash-output"> </pre>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3 style="text-align:center;">THD+N</h3>
+          <pre id="THD+N" class="hash-output"> </pre>
+        </div>
+      </div>
+
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3>2nd Harmonic</h3>
+          <pre id="2Harmonic" class="hash-output"> </pre>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3>3rd Harmonic</h3>
+          <pre id="3Harmonic" class="hash-output"> </pre>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3>4th Harmonic</h3>
+          <pre id="4Harmonic" class="hash-output"> </pre>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-md-offset-3">
+          <h3 class="hash-heading">File</h3>
+          <pre id="FileOutput" class="hash-output"> </pre>
+          <button id="newData" onclick="newData();" type="button" class="btn btn-primary">Choose a new file</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('DataSection').style.display = "none";
+    </script>
+  </div>
+
+
+  <div id="LandingPage" class="jumbotron vertical-center"> 
+
+    <div class="container">
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-offset-3 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
+          <h1 class="hash-heading">Happy DSP</h1>
+          <div class="col-xs-12" style="height:30px;"></div>
+        </div>
+      </div>
+
+      <div style="text-align:center;" class="row">
+        <button id="newData" onclick="newData();" type="button" class="btn btn-primary">Import New Data</button>
+        <div class="col-xs-12" style="height:30px;"></div>
+      </div>
+
+      <div style="text-align:center;" class="row">
+        <img src="images/Xcerra-Black.PNG" alt="HTML5 Icon" style="width:50%;height:50%;">
+      </div>
+    </div>
+  </div>
+
+</body>
+
 </html>
