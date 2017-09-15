@@ -7,12 +7,30 @@
 
 var dataModels = [];
 
+var showFreq = true;
+var showTime = true;
 
 
 function UserException(message) {
     this.message = message;
     this.name = 'UserException';
  }
+
+function showFreqDomain() {
+    showFreq = !showFreq;
+    if(showFreq == true){
+        $('#showFreqDomain').text("Show Freq Domain")
+        document.getElementById('spectrum').style.display = "none"; // Hide Landing Page
+    }
+    if(showFreq == false){
+        $('#showFreqDomain').text("Hide Freq Domain")
+        document.getElementById('spectrum').style.display = "inline"; // Hide Landing Page
+    }
+}
+
+function showTimeDomain() {
+
+}
 
 function newData(){
     const {dialog} = require('electron').remote;
