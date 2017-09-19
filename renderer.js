@@ -65,8 +65,14 @@ class dataModel {
         this.rawData = this.readDataIn(this.pathToFile);
         this.fftData = this.fft(this.rawData);
         this.fftDataMag = this.magDataDb(this.fftData);
-        //this.THD = calcTHD(this.fftDataMag);
         this.harmonics = this.calcHarmonics(this.fftDataMag);
+        this.THD = this.calcTHD(this.fftDataMag, this.harmonics);
+        this.DC = this.fftDataMag[0];
+
+
+        //Move to Controller along with harmonic data
+        $('#THD').text(this.THD.toString())
+        $('#DC').text(this.DC.toString())
 
 
         this.plotData(this.fftDataMag, 'spectrum');
@@ -167,8 +173,29 @@ class dataModel {
     }
 
     //TODO
-    calcTHD () {
+    calcTHD (data, harmonicIndex) {
+        var THD = -300;
+
         
+        console.log(Math.pow(2,2));
+
+        var HarmonicAmplitudesSquared = 0;
+        for(var i = 2; i < harmonicIndex.length; i++){
+            HarmonicAmplitudesSquared = HarmonicAmplitudesSquared + Math.pow(data[harmonicIndex[i]], 2)
+        }
+
+        THD = Math.sqrt(HarmonicAmplitudesSquared);
+
+        THD = THD/data[harmonicIndex[1]];
+
+
+        if (THD == -300){
+            console.log("THD Calculation Failed");
+        }
+        else{
+            console.log("THD: " + THD);
+            return(THD);
+        }
     }
 
     plotData (spectrum, element) {
