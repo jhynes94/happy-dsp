@@ -32,6 +32,34 @@ function showTimeDomain() {
 
 }
 
+
+
+
+
+
+class controller {
+    //Begin
+}
+
+
+
+
+
+
+
+
+
+
+
+/*
+    Known problems:
+
+    * Not sure if actual fft function is correct. Data from it does not compare the same to Richards and R studio, or Unison for that matter.
+    * Many things that should be done with the controller are done here. This needs to change.
+
+
+*/
+
 function newData() {
     const { dialog } = require('electron').remote;
 
