@@ -5,49 +5,66 @@
 //Run this command to package up application for distribution
 //electron-packager .
 
-var dataModels = [];
-
-var showFreq = true;
-var showTime = true;
-
 
 function UserException(message) {
     this.message = message;
     this.name = 'UserException';
 }
 
-function showFreqDomain() {
-    showFreq = !showFreq;
-    if (showFreq == true) {
-        $('#showFreqDomain').text("Show Freq Domain")
-        document.getElementById('spectrum').style.display = "none"; // Hide Landing Page
-    }
-    if (showFreq == false) {
-        $('#showFreqDomain').text("Hide Freq Domain")
-        document.getElementById('spectrum').style.display = "inline"; // Hide Landing Page
-    }
-}
-
-function showTimeDomain() {
-
-}
-
-
-
-
-
-
 class controller {
-    //Begin
+
+    constructor() {
+        this.dataModels = [];
+        this.showFreq = true;
+        this.showTime = true;
+    }
+    
+    //Creates new data Model
+    newData() {
+        
+        const { dialog } = require('electron').remote;
+    
+        var path = dialog.showOpenDialog({
+            filters: [
+    
+                { name: 'text', extensions: ['txt'] }
+    
+            ],
+            properties: ['openFile']
+        });
+    
+        this.dataModels.push(new dataModel(path.toString()));
+        console.log("New Data Model created");
+    
+    
+        document.getElementById('DataSection').style.display = "inline"; //Show Data Page
+        document.getElementById('LandingPage').style.display = "none"; // Hide Landing Page
+    }
+    
+    showFreqDomain() {
+        this.showFreq = !this.showFreq;
+        if (this.showFreq == true) {
+            $('#showFreqDomain').text("Show Freq Domain")
+            document.getElementById('spectrum').style.display = "none"; // Hide Landing Page
+        }
+        if (this.showFreq == false) {
+            $('#showFreqDomain').text("Hide Freq Domain")
+            document.getElementById('spectrum').style.display = "inline"; // Hide Landing Page
+        }
+    }
+    
+    showTimeDomain() {
+        this.showTime = !this.showTime;
+        if (this.showTime == true) {
+            $('#showTimeDomain').text("Show Time Domain")
+            document.getElementById('spectrum').style.display = "none"; // Hide Landing Page
+        }
+        if (this.showTime == false) {
+            $('#showTimeDomain').text("Hide Time Domain")
+            document.getElementById('spectrum').style.display = "inline"; // Hide Landing Page
+        }
+    }
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -59,29 +76,6 @@ class controller {
 
 
 */
-
-function newData() {
-    const { dialog } = require('electron').remote;
-
-    var path = dialog.showOpenDialog({
-        filters: [
-
-            { name: 'text', extensions: ['txt'] }
-
-        ],
-        properties: ['openFile']
-    });
-
-    dataModels.push(new dataModel(path.toString()));
-    console.log("New Data Model created");
-
-
-    document.getElementById('DataSection').style.display = "inline"; //Show Data Page
-    document.getElementById('LandingPage').style.display = "none"; // Hide Landing Page
-
-
-}
-
 class dataModel {
 
     constructor(pathToFile) {
@@ -112,8 +106,6 @@ class dataModel {
         this.plotData(this.fftDataMag, 'spectrum');
         this.plotData(this.rawData, 'timeDomain')
     }
-
-
 
 
     A_WeightedFrequencies(waveform) {
@@ -327,14 +319,10 @@ class dataModel {
             margin: { t: 0 }
         } );*/
     }
-
-    plotData2(decibels) {
-
-        var x = [];
-
-        for (var i = 0; i < decibels.length - 1; i++) {
-            x.push(i);
-        }
-    }
-
 }
+
+
+
+
+
+var control = new controller();
