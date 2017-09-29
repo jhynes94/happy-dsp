@@ -18,6 +18,7 @@
       <script src="default.js"></script>
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+      
 </head>
 
 <body>
@@ -107,15 +108,15 @@
               <!-- Input row -->
               <div style="text-align:center;" class="row">
                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
-                  <h3 class="hash-heading">Start Freq</h3>
-                  <textarea rows="1" id="text-input" class="form-control text-input" placeholder=""></textarea>
+                  <h3 class="hash-heading">Start Bin</h3>
+                  <textarea rows="1" id="startFreq" class="form-control text-input" placeholder=""></textarea>
                 </div>
                 <div style="margin-top:55px;" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                    <button id="updateFilter" onclick="updateFilter();" type="button" class="btn btn-primary">Update</button>
+                    <button id="updateFilter" onclick="control.BandData();" type="button" class="btn btn-primary">Update</button>
                   </div>
                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                  <h3 class="hash-heading">Stop Freq</h3>
-                  <textarea rows="1" id="text-input" class="form-control text-input" placeholder=""></textarea>
+                  <h3 class="hash-heading">Stop Bin</h3>
+                  <textarea rows="1" id="stopFreq" class="form-control text-input" placeholder=""></textarea>
                 </div>
               </div>
         

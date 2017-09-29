@@ -18,29 +18,53 @@ class controller {
         this.showFreq = true;
         this.showTime = true;
     }
-    
+
     //Creates new data Model
     newData() {
-        
-        const { dialog } = require('electron').remote;
-    
-        var path = dialog.showOpenDialog({
-            filters: [
-    
-                { name: 'text', extensions: ['txt'] }
-    
-            ],
-            properties: ['openFile']
-        });
-    
+
+        var path = this.getFilePath();
+
         this.dataModels.push(new dataModel(path.toString()));
         console.log("New Data Model created");
-    
-    
+
         document.getElementById('DataSection').style.display = "inline"; //Show Data Page
         document.getElementById('LandingPage').style.display = "none"; // Hide Landing Page
+
+        this.updateUserData();
+    }
+
+    updateUserData() {
+        var dataModelNumber = 0;
+        $('#THD').text(this.dataModels[dataModelNumber].getTHD());
+        $('#THDN').text(this.dataModels[dataModelNumber].getTHDN());
+        $('#SNR').text(this.dataModels[dataModelNumber].getSNR());
+        $('#ENOB').text(this.dataModels[dataModelNumber].getENOB());
+        $('#DC').text(this.dataModels[dataModelNumber].getDC());
+        $('#startFreq').text("1");
+        $('#stopFreq').text((this.dataModels[dataModelNumber].getRawData().length).toString());
+    }
+
+    getFilePath() {
+        const { dialog } = require('electron').remote;
+        
+                var path = dialog.showOpenDialog({
+                    filters: [
+        
+                        { name: 'text', extensions: ['txt'] }
+        
+                    ],
+                    properties: ['openFile']
+                });
+                return(path);
     }
     
+    BandData() {
+        var startFreq = document.getElementById('startFreq').value;
+        var stopFreq = document.getElementById('stopFreq').value;
+
+        this.dataModels[0].getBandData(startFreq, stopFreq);
+    }
+
     showFreqDomain() {
         this.showFreq = !this.showFreq;
         if (this.showFreq == true) {
@@ -52,7 +76,7 @@ class controller {
             document.getElementById('spectrum').style.display = "inline"; // Hide Landing Page
         }
     }
-    
+
     showTimeDomain() {
         this.showTime = !this.showTime;
         if (this.showTime == true) {
@@ -72,9 +96,6 @@ class controller {
     Known problems:
 
     * Not sure if actual fft function is correct. Data from it does not compare the same to Richards and R studio, or Unison for that matter.
-    * Many things that should be done with the controller are done here. This needs to change.
-
-
 */
 class dataModel {
 
@@ -91,22 +112,12 @@ class dataModel {
         this.THD = this.calcTHD(this.fftData, this.harmonics);
         this.THDN = this.calcTHDN(this.fftData, this.harmonics[1]);
         this.SNR = this.calcSNR(this.THDN, this.fftDataMag[this.harmonics[1]]);
+        this.ENOB = this.calcENOB(this.SNR);
         this.DC = this.fftDataMag[0];
-
-        console.log("Fund" + this.fftData[this.harmonics[1]])
-
-
-        //Move to Controller along with harmonic data
-        $('#THD').text(this.THD.toString())
-        $('#THDN').text(this.THDN.toString())
-        $('#SNR').text(this.SNR.toString())
-        $('#DC').text(this.DC.toString())
-
 
         this.plotData(this.fftDataMag, 'spectrum');
         this.plotData(this.rawData, 'timeDomain')
     }
-
 
     A_WeightedFrequencies(waveform) {
         //https://www.npmjs.com/package/a-weighting
@@ -234,7 +245,6 @@ class dataModel {
             console.log("THD Calculation Failed");
         }
         else {
-            console.log("THD: " + THD);
             return (THD);
         }
     }
@@ -260,7 +270,6 @@ class dataModel {
             console.log("THDN Calculation Failed");
         }
         else {
-            console.log("THDN: " + THDN);
             return (THDN);
         }
     }
@@ -268,6 +277,41 @@ class dataModel {
     calcSNR(THDN, fundemental) {
         return (THDN / fundemental);
     }
+
+    calcENOB(SNR) {
+        var ENOB = (SNR - 1.76) / 6.02;
+        return (ENOB);
+    }
+
+    //Getters
+    getRawData(){
+        return(this.rawData);
+    }
+
+    getHarmonics() {
+        return(this.harmonics);
+    }
+
+    getTHD() {
+        return(this.THD);
+    }
+
+    getTHDN() {
+        return(this.THDN);
+    }
+
+    getSNR() {
+        return(this.SNR);
+    }
+
+    getENOB() {
+        return(this.ENOB);
+    }
+
+    getDC() {
+        return(this.DC);
+    }
+
 
     plotData(spectrum, element) {
         var x = [];
@@ -289,6 +333,7 @@ class dataModel {
         };
 
         var layout = {
+            //dragmode: 'lasso', //ADDED  https://codepen.io/etpinard/pen/OMgWjz
             yaxis: {
                 title: "dB",
                 color: 'rgb(231,223,221)'
@@ -307,17 +352,31 @@ class dataModel {
 
         Plotly.plot(document.getElementById(element), [trace], layout, { showLink: false });
 
-        /*
-        var TESTER = document.getElementById(element);
-        Plotly.plot( TESTER, [{
-        x: x,
-        y: spectrum,
-        mode: "lines",
-        type: "scatter",
-        title: "Spectum Plot"
-        }], {
-            margin: { t: 0 }
-        } );*/
+        document.getElementById(element).on('plotly_selected', function (eventData) {
+            var x = [];
+            var y = [];
+
+            var colors = [];
+            for (var i = 0; i < N; i++) colors.push(color1Light);
+
+            console.log(eventData.points)
+
+            eventData.points.forEach(function (pt) {
+                x.push(pt.x);
+                y.push(pt.y);
+                colors[pt.pointNumber] = color1;
+            });
+
+            Plotly.restyle(graphDiv, {
+                x: [x, y],
+                xbins: {}
+            }, [1, 2]);
+
+            Plotly.restyle(graphDiv, 'marker.color', [colors], [0]);
+        });
+
+
+
     }
 }
 
