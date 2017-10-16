@@ -95,7 +95,7 @@ class controller {
 /*
     Known problems:
 
-    * Not sure if actual fft function is correct. Data from it does not compare the same to Richards and R studio, or Unison for that matter.
+    * Check FFT function for correctness
 */
 class dataModel {
 
@@ -153,47 +153,19 @@ class dataModel {
     }
 
     fft(rawData) {
-
-       /* var ooura = require('ooura');
-        
-       // Set up an input signal of size 8;
-       let input = new Float64Array([1,2,3,4,1,2,3,4]);
-        
-       // Set up the FFT object and use a helper to generate an output array
-       // of correct length and type.
-       let oo = new ooura(input.length, {"type":"real", "radix":4});
-       let output = oo.scalarArrayFactory();
-        
-       //helper to get single sided complex arrays
-       let re = oo.vectorArrayFactory();
-       let im = oo.vectorArrayFactory();
-        
-       //do some FFTing in both directions (using the built in helper functions to get senseful I/O)
-       //note: reference underlying array buffers for in-place processing
-       oo.fft(input.buffer, re.buffer, im.buffer);   //populates re and im from input
-       oo.ifft(output.buffer, re.buffer, im.buffer); //populates output from re and im
-        
-       // look at the results and intermediate representation
-       console.log("ip = " + input);
-       console.log("re = " + re);
-       console.log("im = " + im);
-       console.log("op = " + output);*/
-
-
-       //--------------------------------------------
-
-
         var ft = require('fourier-transform');
         var spectrum = ft(rawData);
-        console.log(spectrum[1003]);
 
-        // console.log("Compare " + spectrum.length + " fft-js: " + phasors.length)
-        // console.log("Compare " + spectrum[0] + " fft-js: " + phasors[0])
-        // console.log("Compare " + spectrum[341] + " fft-js: " + phasors[341])
-        // console.log("Compare " + spectrum[342] + " fft-js: " + phasors[342])
-        // console.log("Compare " + spectrum[500] + " fft-js: " + phasors[500])
+        var newarray = [];
+        for(var i = 0; i < spectrum.length; i++){
+            if(i%2 == 0) {
+                newarray.push(spectrum[i]);
+            }
+        }
+
+        //console.log(spectrum[1003]);
         
-        return (spectrum)
+        return (newarray)
     }
 
     magDataDb(fftData) {
@@ -351,18 +323,16 @@ class dataModel {
         return(this.DC);
     }
 
-
     plotData(spectrum, element) {
         var x = [];
 
         for (var i = 0; i < spectrum.length; i++) {
             x.push(i);
         }
-        console.log(spectrum);
 
 
         var trace = {
-            type: 'scatter',                    // set the chart type
+            type: 'scattergl',
             mode: 'markers',                      // connect points with lines
             x: x,
             y: spectrum,
