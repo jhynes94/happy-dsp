@@ -42,22 +42,150 @@ class controller {
         $('#DC').text(this.dataModels[dataModelNumber].getDC());
         $('#startFreq').text("1");
         $('#stopFreq').text((this.dataModels[dataModelNumber].getRawData().length).toString());
+
+
+        var x = [];
+
+        for (var i = 0; i < this.dataModels[dataModelNumber].getRawData().length; i++) {
+            x.push(i);
+        }
+
+        this.plotWaveform(x, this.dataModels[dataModelNumber].getRawData());
+        this.plotSpectrum(x, this.dataModels[dataModelNumber].getDataMagFFT());
+    }
+
+    plotWaveform(time, amplitude) {
+
+        var element = 'timeDomain';
+
+        var trace = {
+            type: 'scattergl',
+            mode: 'markers',                      // connect points with lines
+            x: time,
+            y: amplitude,
+            line: {                             // set the width of the line.
+                width: 2,
+                color: 'rgb(71,23,246)'
+            }
+        };
+
+        var layout = {
+            //dragmode: 'lasso', //ADDED  https://codepen.io/etpinard/pen/OMgWjz
+            yaxis: {
+                title: "V",
+                color: 'rgb(231,223,221)'
+            },
+            xaxis: {
+                title: "Time",
+                showgrid: false,
+                color: 'rgb(231,223,221)'
+            },
+            margin: {                           // update the left, bottom, right, top margin
+                l: 40, b: 40, r: 40, t: 40
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
+        };
+
+        Plotly.plot(document.getElementById(element), [trace], layout, { showLink: false });
+
+        document.getElementById(element).on('plotly_selected', function (eventData) {
+            var x = [];
+            var y = [];
+
+            var colors = [];
+            for (var i = 0; i < N; i++) colors.push(color1Light);
+
+            console.log(eventData.points)
+
+            eventData.points.forEach(function (pt) {
+                x.push(pt.x);
+                y.push(pt.y);
+                colors[pt.pointNumber] = color1;
+            });
+
+            Plotly.restyle(graphDiv, {
+                x: [x, y],
+                xbins: {}
+            }, [1, 2]);
+
+            Plotly.restyle(graphDiv, 'marker.color', [colors], [0]);
+        });
+    }
+
+    plotSpectrum(bin, amplitude) {
+
+        var element = 'spectrum';
+
+        var trace = {
+            type: 'scattergl',
+            mode: 'markers',                      // connect points with lines
+            x: bin,
+            y: amplitude,
+            line: {                             // set the width of the line.
+                width: 2,
+                color: 'rgb(71,23,246)'
+            }
+        };
+
+        var layout = {
+            //dragmode: 'lasso', //ADDED  https://codepen.io/etpinard/pen/OMgWjz
+            yaxis: {
+                title: "dB",
+                color: 'rgb(231,223,221)'
+            },
+            xaxis: {
+                title: "Bin",
+                showgrid: false,
+                color: 'rgb(231,223,221)'
+            },
+            margin: {                           // update the left, bottom, right, top margin
+                l: 40, b: 40, r: 40, t: 40
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
+        };
+
+        Plotly.plot(document.getElementById(element), [trace], layout, { showLink: false });
+
+        document.getElementById(element).on('plotly_selected', function (eventData) {
+            var x = [];
+            var y = [];
+
+            var colors = [];
+            for (var i = 0; i < N; i++) colors.push(color1Light);
+
+            console.log(eventData.points)
+
+            eventData.points.forEach(function (pt) {
+                x.push(pt.x);
+                y.push(pt.y);
+                colors[pt.pointNumber] = color1;
+            });
+
+            Plotly.restyle(graphDiv, {
+                x: [x, y],
+                xbins: {}
+            }, [1, 2]);
+
+            Plotly.restyle(graphDiv, 'marker.color', [colors], [0]);
+        });
     }
 
     getFilePath() {
         const { dialog } = require('electron').remote;
-        
-                var path = dialog.showOpenDialog({
-                    filters: [
-        
-                        { name: 'text', extensions: ['txt'] }
-        
-                    ],
-                    properties: ['openFile']
-                });
-                return(path);
+
+        var path = dialog.showOpenDialog({
+            filters: [
+
+                { name: 'text', extensions: ['txt'] }
+
+            ],
+            properties: ['openFile']
+        });
+        return (path);
     }
-    
+
     BandData() {
         var startFreq = document.getElementById('startFreq').value;
         var stopFreq = document.getElementById('stopFreq').value;
@@ -95,7 +223,7 @@ class controller {
 /*
     Known problems:
 
-    * Check FFT function for correctness
+    * None.
 */
 class dataModel {
 
@@ -114,9 +242,6 @@ class dataModel {
         this.SNR = this.calcSNR(this.THDN, this.fftDataMag[this.harmonics[1]]);
         this.ENOB = this.calcENOB(this.SNR);
         this.DC = this.fftDataMag[0];
-
-        this.plotData(this.fftDataMag, 'spectrum');
-        this.plotData(this.rawData, 'timeDomain')
     }
 
     A_WeightedFrequencies(waveform) {
@@ -143,8 +268,8 @@ class dataModel {
         })
 
         //Removed NaN for array of Data
-        for (var i = 0; i < arrayOfData.length; i++) { 
-            if(isNaN(arrayOfData[i]) == true){
+        for (var i = 0; i < arrayOfData.length; i++) {
+            if (isNaN(arrayOfData[i]) == true) {
                 //console.log("NaN: " + arrayOfData[i] + " found at: " + i);
                 arrayOfData.splice(i, 1)
             }
@@ -153,24 +278,23 @@ class dataModel {
     }
 
     fft(rawData) {
+
         var ft = require('fourier-transform');
         var spectrum = ft(rawData);
 
         var newarray = [];
-        for(var i = 0; i < spectrum.length; i++){
-            if(i%2 == 0) {
+        for (var i = 0; i < spectrum.length; i++) {
+            if (i % 2 == 0) {
                 newarray.push(spectrum[i]);
             }
         }
 
-        //console.log(spectrum[1003]);
-        
         return (newarray)
     }
 
     magDataDb(fftData) {
         //convert to decibels 
-        var db = require('decibels');  
+        var db = require('decibels');
         var decibels = fftData.map((value) => db.fromGain(value))
 
         return (decibels);
@@ -295,98 +419,40 @@ class dataModel {
     }
 
     //Getters
-    getRawData(){
-        return(this.rawData);
+    getRawData() {
+        return (this.rawData);
+    }
+
+    getFFTData() {
+        return (this.fftData);
+    }
+
+    getDataMagFFT() {
+        return (this.fftDataMag)
     }
 
     getHarmonics() {
-        return(this.harmonics);
+        return (this.harmonics);
     }
 
     getTHD() {
-        return(this.THD);
+        return (this.THD);
     }
 
     getTHDN() {
-        return(this.THDN);
+        return (this.THDN);
     }
 
     getSNR() {
-        return(this.SNR);
+        return (this.SNR);
     }
 
     getENOB() {
-        return(this.ENOB);
+        return (this.ENOB);
     }
 
     getDC() {
-        return(this.DC);
-    }
-
-    plotData(spectrum, element) {
-        var x = [];
-
-        for (var i = 0; i < spectrum.length; i++) {
-            x.push(i);
-        }
-
-
-        var trace = {
-            type: 'scattergl',
-            mode: 'markers',                      // connect points with lines
-            x: x,
-            y: spectrum,
-            line: {                             // set the width of the line.
-                width: 2,
-                color: 'rgb(71,23,246)'
-            }
-        };
-
-        var layout = {
-            //dragmode: 'lasso', //ADDED  https://codepen.io/etpinard/pen/OMgWjz
-            yaxis: {
-                title: "dB",
-                color: 'rgb(231,223,221)'
-            },
-            xaxis: {
-                title: "Bin",
-                showgrid: false,
-                color: 'rgb(231,223,221)'
-            },
-            margin: {                           // update the left, bottom, right, top margin
-                l: 40, b: 40, r: 40, t: 40
-            },
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)'
-        };
-
-        Plotly.plot(document.getElementById(element), [trace], layout, { showLink: false });
-
-        document.getElementById(element).on('plotly_selected', function (eventData) {
-            var x = [];
-            var y = [];
-
-            var colors = [];
-            for (var i = 0; i < N; i++) colors.push(color1Light);
-
-            console.log(eventData.points)
-
-            eventData.points.forEach(function (pt) {
-                x.push(pt.x);
-                y.push(pt.y);
-                colors[pt.pointNumber] = color1;
-            });
-
-            Plotly.restyle(graphDiv, {
-                x: [x, y],
-                xbins: {}
-            }, [1, 2]);
-
-            Plotly.restyle(graphDiv, 'marker.color', [colors], [0]);
-        });
-
-
-
+        return (this.DC);
     }
 }
 
