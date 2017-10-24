@@ -4,177 +4,190 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    
-      <title>DSP</title>
-    
-      <!-- Stylesheets -->
-      <link rel="stylesheet" href="./vendor/bootstrap-3.3.7.css">
-      <link rel="stylesheet" href="./styles.css">
-    
-      <!-- Scripts -->
-      <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-      <script src="renderer.js"></script>
-      <script src="default.js"></script>
-      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <meta charset="UTF-8">
 
-      
+  <title>DSP</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./vendor/bootstrap-3.3.7.css">
+  <link rel="stylesheet" href="./styles.css">
+
+  <!-- Scripts -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="renderer.js"></script>
+  <script src="default.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
 </head>
 
 <body>
 
-     <div class="navbar navbar-default navbar-fixed-top" id="title-bar">
+  <div class="navbar navbar-default navbar-fixed-top" id="title-bar">
 
-          <div id="title">Happy DSP</div>
+    <div id="title">Happy DSP</div>
 
-          <div id="title-bar-btns">
+    <div id="title-bar-btns">
 
-               <button id="min-btn">-</button>
+      <button id="min-btn">-</button>
 
-               <button id="max-btn">+</button>
+      <button id="max-btn">+</button>
 
-               <button id="close-btn">x</button>
+      <button id="close-btn">x</button>
 
-          </div>
+    </div>
 
-     </div>
+  </div>
 
-     
-     <div id="container" class="container-fluid">
-        
-            <div class="col-xs-12" style="height:60px;"></div>
-        
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div id="timeDomain" style="width:100%;height:100%;"></div>
-              </div>
-            </div>
-        
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div id="spectrum" style="width:100%;height:100%;"></div>
-              </div>
-            </div>
-        
-        
-        
-            <div id="DataSection">
-              <div style="text-align:center;" class="row">
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
-                  <h3>DC</h3>
-                  <pre id="DC" class="hash-output">N/A</pre>
-                </div>
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                  <h3>THD</h3>
-                  <pre id="THD" class="hash-output">N/A</pre>
-                </div>
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                  <h3>THD+N</h3>
-                  <pre id="THDN" class="hash-output">N/A</pre>
-                </div>
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                  <h3>SNR</h3>
-                  <pre id="SNR" class="hash-output">N/A</pre>
-                </div>
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                  <h3>ENOB</h3>
-                  <pre id="ENOB" class="hash-output">N/A</pre>
-                </div>
-              </div>
-        
-              <div style="text-align:center;" class="row">
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                  <h3>Fundemental</h3>
-                  <pre id="1Harmonic" class="hash-output"> </pre>
-                </div>
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                  <h3>2nd Harmonic</h3>
-                  <pre id="2Harmonic" class="hash-output"> </pre>
-                </div>
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                  <h3>3rd Harmonic</h3>
-                  <pre id="3Harmonic" class="hash-output"> </pre>
-                </div>
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                  <h3>4th Harmonic</h3>
-                  <pre id="4Harmonic" class="hash-output"> </pre>
-                </div>
-              </div>
-        
-        
-              <hr>
-        
-        
-              <!-- Input row -->
-              <div style="text-align:center;" class="row">
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
-                  <h3 class="hash-heading">Start Bin</h3>
-                  <textarea rows="1" id="startFreq" class="form-control text-input" placeholder=""></textarea>
-                </div>
-                <div style="margin-top:55px;" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                    <button id="updateFilter" onclick="control.BandData();" type="button" class="btn btn-primary">Update</button>
-                  </div>
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                  <h3 class="hash-heading">Stop Bin</h3>
-                  <textarea rows="1" id="stopFreq" class="form-control text-input" placeholder=""></textarea>
-                </div>
-              </div>
-        
-              <div style="text-align:center;" class="row">
-                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <h3>THD+N</h3>
-                    <pre id="ENOB" class="hash-output">N/A</pre>
-                  </div>
-                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <h3>SNR</h3>
-                    <pre id="ENOB" class="hash-output">N/A</pre>
-                  </div>
-                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <h3>ENOB</h3>
-                    <pre id="ENOB" class="hash-output">N/A</pre>
-                  </div>
-                </div>
-        
-                <hr>
-        
-                
-                <div style="text-align:center;" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-md-offset-3">
-                    <h3 class="hash-heading">File</h3>
-                    <pre id="FileOutput" class="hash-output"> </pre>
-                    <button id="newData" onclick="control.newData();" type="button" class="btn btn-primary">Choose a new file</button>
-                  </div>
-        
-            </div>
-        
-        
-            
-        
-            <script>
-              document.getElementById('DataSection').style.display = "none";
-            </script>
-          </div>
-        
-        
-          <div id="LandingPage" class="jumbotron vertical-center">
-        
-            <div class="container">
-              <div style="text-align:center;" class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-offset-3 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
-                  <h1 class="hash-heading">Happy DSP</h1>
-                  <div class="col-xs-12" style="height:30px;"></div>
-                </div>
-              </div>
-        
-              <div style="text-align:center;" class="row">
-                <button id="newData" onclick="control.newData();" type="button" class="btn btn-primary">Import Data</button>
-                <div class="col-xs-12" style="height:30px;"></div>
-              </div>
-        
-              <div style="text-align:center;" class="row">
-                <img src="images/Xcerra-Black.PNG" alt="HTML5 Icon" style="width:50%;height:50%;">
-              </div>
-            </div>
-          </div>
+
+  <div id="container" class="container-fluid">
+
+    <div class="col-xs-12" style="height:60px;"></div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="timeDomain" style="width:100%;height:100%;"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="spectrum" style="width:100%;height:100%;"></div>
+      </div>
+    </div>
+
+
+
+    <div id="DataSection">
+      <div style="text-align:center; margin-top: 10px;" class="row">
+        <div style="text-align:center;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
+          <button id="newData" onclick="control.plotRestyle('markers', 'spectrum');" type="button" class="btn btn-primary">scatter</button>
+        </div>
+    
+        <div style="text-align:center;" class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+          <button id="newData" onclick="control.plotRestyle('line', 'spectrum');" type="button" class="btn btn-primary">line</button>
+        </div>
+      </div>
+    
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+          <h3>DC</h3>
+          <pre id="DC" class="hash-output">N/A</pre>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <h3>THD</h3>
+          <pre id="THD" class="hash-output">N/A</pre>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <h3>THD+N</h3>
+          <pre id="THDN" class="hash-output">N/A</pre>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <h3>SNR</h3>
+          <pre id="SNR" class="hash-output">N/A</pre>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <h3>ENOB</h3>
+          <pre id="ENOB" class="hash-output">N/A</pre>
+        </div>
+      </div>
+
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <h3>Fundemental</h3>
+          <pre id="1Harmonic" class="hash-output"> </pre>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <h3>2nd Harmonic</h3>
+          <pre id="2Harmonic" class="hash-output"> </pre>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <h3>3rd Harmonic</h3>
+          <pre id="3Harmonic" class="hash-output"> </pre>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <h3>4th Harmonic</h3>
+          <pre id="4Harmonic" class="hash-output"> </pre>
+        </div>
+      </div>
+
+
+
+      <hr>
+
+
+      <!-- Input row -->
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
+          <h3 class="hash-heading">Start Bin</h3>
+          <textarea rows="1" id="startFreq" class="form-control text-input" placeholder=""></textarea>
+        </div>
+        <div style="margin-top:55px;" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <button id="updateFilter" onclick="control.BandData();" type="button" class="btn btn-primary">Update</button>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <h3 class="hash-heading">Stop Bin</h3>
+          <textarea rows="1" id="stopFreq" class="form-control text-input" placeholder=""></textarea>
+        </div>
+      </div>
+
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3>THD+N</h3>
+          <pre id="bandTHDN" class="hash-output">N/A</pre>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3>SNR</h3>
+          <pre id="bandSNR" class="hash-output">N/A</pre>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <h3>ENOB</h3>
+          <pre id="bandENOB" class="hash-output">N/A</pre>
+        </div>
+      </div>
+
+      <hr>
+
+
+      <div style="text-align:center;" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-md-offset-3">
+        <h3 class="hash-heading">File</h3>
+        <pre id="FileOutput" class="hash-output"> </pre>
+        <button id="newData" onclick="control.newData();" type="button" class="btn btn-primary">Choose a new file</button>
+      </div>
+
+    </div>
+
+
+
+
+    
+
+    <script>
+      document.getElementById('DataSection').style.display = "none";
+    </script>
+  </div>
+
+
+  <div id="LandingPage" class="jumbotron vertical-center">
+
+    <div class="container">
+      <div style="text-align:center;" class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-offset-3 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
+          <h1 class="hash-heading">Happy DSP</h1>
+          <div class="col-xs-12" style="height:30px;"></div>
+        </div>
+      </div>
+
+      <div style="text-align:center;" class="row">
+        <button id="newData" onclick="control.newData();" type="button" class="btn btn-primary">Import Data</button>
+        <div class="col-xs-12" style="height:30px;"></div>
+      </div>
+
+      <div style="text-align:center;" class="row">
+        <img src="images/Xcerra-Black.PNG" alt="HTML5 Icon" style="width:50%;height:50%;">
+      </div>
+    </div>
+  </div>
 
 </body>
 

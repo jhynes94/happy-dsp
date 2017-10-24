@@ -33,6 +33,30 @@ class controller {
         this.updateUserData();
     }
 
+    plotRestyle(type, element) {
+        // restyle a single trace using attribute strings        
+        var update = {
+            //opacity: 0.4,
+            //'marker.color': 'red',
+            mode: type,
+        };
+        Plotly.restyle(document.getElementById(element), update, 0);
+
+        /*// restyle all traces using attribute strings
+        var update = {
+            opacity: 0.4,
+            'marker.color': 'red'
+        };
+        Plotly.restyle(graphDiv, update);
+
+        // restyle two traces using attribute strings
+        var update = {
+            opacity: 0.4,
+            'marker.color': 'red'
+        };
+        Plotly.restyle(graphDiv, update, [1, 2]);*/
+    }
+
     updateUserData() {
         var dataModelNumber = 0;
         $('#THD').text(this.dataModels[dataModelNumber].getTHD());
@@ -40,7 +64,7 @@ class controller {
         $('#SNR').text(this.dataModels[dataModelNumber].getSNR());
         $('#ENOB').text(this.dataModels[dataModelNumber].getENOB());
         $('#DC').text(this.dataModels[dataModelNumber].getDC());
-        $('#startFreq').text("1");
+        $('#startFreq').text("0");
         $('#stopFreq').text((this.dataModels[dataModelNumber].getRawData().length).toString());
 
 
@@ -60,7 +84,7 @@ class controller {
 
         var trace = {
             type: 'scattergl',
-            mode: 'markers',                      // connect points with lines
+            mode: 'lines',                      // connect points with lines
             x: time,
             y: amplitude,
             line: {                             // set the width of the line.
@@ -114,7 +138,6 @@ class controller {
     }
 
     plotSpectrum(bin, amplitude) {
-
         var element = 'spectrum';
 
         var trace = {
@@ -190,7 +213,13 @@ class controller {
         var startFreq = document.getElementById('startFreq').value;
         var stopFreq = document.getElementById('stopFreq').value;
 
-        this.dataModels[0].getBandData(startFreq, stopFreq);
+
+
+        var data = this.dataModels[0].dataInBandwidth(startFreq, stopFreq);
+
+        $('#bandTHDN').text(data[0].toString());
+        $('#bandSNR').text(data[1].toString());
+        $('#bandENOB').text(data[2].toString());
     }
 
     showFreqDomain() {
@@ -416,6 +445,19 @@ class dataModel {
     calcENOB(SNR) {
         var ENOB = (SNR - 1.76) / 6.02;
         return (ENOB);
+    }
+
+    dataInBandwidth(startFreq, stopFreq){
+
+        var bandArray = [];
+        bandArray = this.fftDataMag.slice(startFreq, stopFreq);
+        console.log("test 2");
+        var harmonics = this.calcHarmonics(bandArray);
+        var THDN = this.calcTHDN(bandArray, harmonics[1]);
+        var SNR = this.calcSNR(THDN, bandArray[harmonics[1]]);
+        var ENOB = this.calcENOB(SNR);
+        console.log("test 3");
+        return([THDN, SNR, ENOB]);
     }
 
     //Getters
