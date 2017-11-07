@@ -439,7 +439,7 @@ class dataModel {
     }
 
     calcSNR(THDN, fundemental) {
-        return (THDN / fundemental);
+        return (fundemental - THDN);
     }
 
     calcENOB(SNR) {
