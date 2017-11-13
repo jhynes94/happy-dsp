@@ -213,8 +213,6 @@ class controller {
         var startFreq = document.getElementById('startFreq').value;
         var stopFreq = document.getElementById('stopFreq').value;
 
-
-
         var data = this.dataModels[0].dataInBandwidth(startFreq, stopFreq);
 
         $('#bandTHDN').text(data[0].toString());
@@ -449,14 +447,13 @@ class dataModel {
 
     dataInBandwidth(startFreq, stopFreq){
 
-        var bandArray = [];
-        bandArray = this.fftDataMag.slice(startFreq, stopFreq);
-        console.log("test 2");
-        var harmonics = this.calcHarmonics(bandArray);
-        var THDN = this.calcTHDN(bandArray, harmonics[1]);
-        var SNR = this.calcSNR(THDN, bandArray[harmonics[1]]);
+        var bandMagArray = this.fftDataMag.slice(startFreq, stopFreq);
+        var bandfftArray = this.fftData.slice(startFreq, stopFreq);
+
+        var harmonics = this.calcHarmonics(bandMagArray);
+        var THDN = this.calcTHDN(bandfftArray, harmonics[1]);
+        var SNR = this.calcSNR(THDN, bandMagArray[harmonics[1]]);
         var ENOB = this.calcENOB(SNR);
-        console.log("test 3");
         return([THDN, SNR, ENOB]);
     }
 
