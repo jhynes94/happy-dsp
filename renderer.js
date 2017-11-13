@@ -3,7 +3,9 @@
 // All of the Node.js APIs are available in this process.
 
 //Run this command to package up application for distribution
+// first is perferred
 //electron-packager .
+//electron-packager ./ --platform=win32
 
 
 function UserException(message) {

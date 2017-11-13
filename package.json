@@ -1,7 +1,7 @@
 {
   "name": "happy-dsp",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A simple DSP program",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
@@ -14,10 +14,11 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "Justin Hynes-Bruell",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "~1.6.2"
+    "electron": "~1.6.2",
+    "electron-packager": "^9.1.0"
   },
   "dependencies": {
     "fourier-transform": "latest",

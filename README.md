@@ -4,6 +4,12 @@ This is a basic DSP platform
 
 ## To Use
 
+1. Download Repository
+2. Decompress "Windows Application folder"
+3. Run "happy dsp" executable file
+
+## To Develop
+
 To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
 ```bash
