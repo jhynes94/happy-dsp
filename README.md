@@ -1,6 +1,7 @@
 # Happy DSP
 
-This is a Digital Signal Processing tool built while working at Xcerra (now Cohu). It is able to read a saved digital signal from a csv and preform processing on it. Such as FFT, harmonics, SNR, DC, THD, THD+N, SNR, and ENOB.
+## Mission
+This is a Digital Signal Processing tool built while working at Xcerra (now Cohu). It is able to read a saved digital signal from a csv and preform processing on it. Such as FFT, harmonics, SNR, DC, THD, THD+N, SNR, and ENOB. This was built with Electron, and vanilla javascript.
 
 ![Alt text](data/exampleImage.PNG?raw=true "Title")
 
