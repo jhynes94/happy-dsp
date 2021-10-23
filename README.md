@@ -2,9 +2,11 @@
 
 This is a Digital Signal Processing tool built while working at Xcerra (now Cohu). It is able to read a saved digital signal from a csv and preform processing on it. Such as FFT, harmonics, SNR, DC, THD, THD+N, SNR, and ENOB.
 
+![Alt text](data/exampleImage.PNG?raw=true "Title")
+
 ## To Use
 
-1. Download Repository
+1. Download the release on GitHub
 2. Decompress "Windows Application folder"
 3. Run "happy dsp" executable file
 
